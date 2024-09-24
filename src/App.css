@@ -1,0 +1,17 @@
+.app_container{
+    @apply flex flex-row  w-full h-full
+}
+
+.navbar{
+    @apply flex flex-col bg-blue-500
+}
+
+.navbar_2{
+    @apply flex flex-col min-w-[10%] bg-blue-400
+
+}
+
+.board{
+    @apply flex flex-grow w-[90%] h-full
+}
+

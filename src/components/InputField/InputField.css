@@ -1,0 +1,15 @@
+.input{
+    @apply flex flex-col w-full h-full  justify-center px-5 
+}
+
+.input_box{
+    @apply w-full rounded-md py-5 px-7 border-none shadow-inner duration-[2000] focus:shadow-2xl
+}
+
+.input_submit{
+    @apply mt-2 w-12 h-12 rounded-2xl right-0 bg-blue-500 text-white mx-4 shadow-xl border-none hover:bg-blue-400 active:scale-75 active:shadow-lg
+}
+
+.label{
+    @apply font-bold
+}
