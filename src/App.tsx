@@ -1,23 +1,33 @@
 import React, { useState } from 'react'
-import Board from './Board'
-import { GiHamburgerMenu } from "react-icons/gi";
+import Board, { BoardLoader } from './Board'
 import "./App.css"
+import {createBrowserRouter , Route, createRoutesFromElements, RouterProvider, Outlet } from 'react-router-dom';
+import RouterLayout from './components/RouterLayout/RouterLayout';
+import ErrorPage from './components/pageNorFound/ErrorPage';
+import BoardError from './components/ErrorElement/BoardError';
 
 const App: React.FC = () => {
-    const [hidden, setHidden] =  useState(true)
 
-    console.log(hidden)
+
+
+
+    const router = createBrowserRouter(
+        createRoutesFromElements(
+            <Route path="/" element={<RouterLayout/>}>
+                <Route  path="/board" element={<Outlet/>} errorElement={<BoardError/>}>
+                    <Route path=":id" element={<Board name={"testing"}/>} loader={BoardLoader}/>
+                </Route>
+                
+                <Route path="*" element={<ErrorPage/>}></Route>
+
+            </Route>
+        )
+    )
+
+    
     return (
-        <div className="app_container h-full">
-            <div className={`${hidden ? "navbar" : "navbar_2"} `}>
-                <span onClick={()=>setHidden(!hidden)}>
-                    <GiHamburgerMenu size={"30px"}/>
-                </span>
-            </div>
-            <div className="board">
-                <Board name="Test"></Board>
-            </div>
-        </div>
+        <RouterProvider router={router}></RouterProvider>
+
     )
 }
 

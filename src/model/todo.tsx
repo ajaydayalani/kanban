@@ -5,3 +5,8 @@ export interface TODO{
     tags:string[]
     dueDate:Date
 }
+
+export interface board{
+    board:string,
+    tasks:TODO[]
+  }

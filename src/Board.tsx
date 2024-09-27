@@ -1,26 +1,34 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import InputField from './components/InputField/InputField'
-import { TODO } from "./model/todo"
+import { TODO, board } from "./model/todo"
 import TodoList from './components/ToDoList/TodoList'
 import Modal from 'react-modal';
+import { useParams, LoaderFunctionArgs, useLoaderData,  } from 'react-router-dom'
+import axios from 'axios'
 
 
 interface props{
   name:string
 }
+type RouteParams= {
+  id: string; // Expecting id to be a string
+}
 
 
 const Board: React.FC<props> = ({name}) => {
 
-  let subtitle;
-
+const data:TODO[] = useLoaderData() as TODO[];
+const {id} =  useParams<RouteParams>();
 
   const [tasks, setTasks] = useState<TODO[]>([])
   const [modalIsOpen, setIsOpen] = useState(false);
 
 
-
+  useEffect(() => {
+  setTasks(data)
+  },[id]); 
+  
 
 
 
@@ -74,9 +82,9 @@ const Board: React.FC<props> = ({name}) => {
 
   return (
     <>
-      <div className='board'>
+      <div key={id} className='board'>
         <h1 className="header">
-          {name}
+          {id}
         </h1>
         <div className='list-container'>
             <ModalDemo/>
@@ -102,3 +110,44 @@ const Board: React.FC<props> = ({name}) => {
 }
 
 export default Board
+
+
+
+
+export const BoardLoader = async ({ params }:LoaderFunctionArgs):Promise<TODO[]> => {
+  const { id } = params; // Get ID from params
+  const cancelToken = axios.CancelToken.source();
+
+  if (!id) {
+    throw new Error("No ID provided in params."); // Ensure ID is provided
+  }
+
+  try {
+    const res = await axios.get("http://localhost:4000/boards", { cancelToken: cancelToken.token });
+    const boardData = res.data.filter((val:any) => val.board === id);
+
+    const todoList = boardData.length
+      ? boardData[0].tasks.map((task:any) => ({
+          id: task.id,
+          todo: task.todo,
+          isDone: task.isDone,
+          tags: task.tags,
+          dueDate: new Date(task.dueDate), // Convert string to Date
+        }))
+      : [];
+
+        if(todoList.length===0){
+          throw new Error("No Value")
+        }
+
+    return todoList;
+  } catch (err) {
+    if (axios.isCancel(err)) {
+      console.error("Request canceled", err.message);
+      throw new Error("Request canceled");
+    } else {
+      console.error("An error occurred", err);
+      throw new Error("Failed to load board data");
+    }
+  }
+};

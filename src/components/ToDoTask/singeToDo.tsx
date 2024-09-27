@@ -52,9 +52,9 @@ const SingleToDo: React.FC<props> = ({item, handleCompleteion, handleDeletion}) 
            
             
             ></input>
-            <p> Tags: {item.tags.join(", ")}</p>
 
             </span>
+            <p> Tags: {item.tags.join(", ")}</p>
 
         </div>
     )

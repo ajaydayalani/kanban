@@ -1,5 +1,5 @@
 .task-container{
-    @apply flex flex-col text-black bg-blue-300 my-5 mx-5 rounded-lg justify-center  py-5 px-5
+    @apply flex flex-col text-black bg-blue-300 my-5 rounded-lg justify-center  py-5 px-5
 }
 
 .task-row{
